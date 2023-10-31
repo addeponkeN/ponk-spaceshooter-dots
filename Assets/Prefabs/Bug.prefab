@@ -375,6 +375,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RiseRate: 1
+  WalkSpeed: 0.5
+  WalkAmp: 0.25
+  WalkFreq: 16
 --- !u!1 &5623464009516843321
 GameObject:
   m_ObjectHideFlags: 0

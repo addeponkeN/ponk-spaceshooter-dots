@@ -13,7 +13,6 @@ public partial struct SpawnBugSystem : ISystem
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-
     }
 
     [BurstCompile]
@@ -25,10 +24,9 @@ public partial struct SpawnBugSystem : ISystem
         {
             DeltaTime = deltaTime,
             ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged),
-        }.Run();
+        }.Schedule();
     }
 }
-
 
 [BurstCompile]
 public partial struct SpawnBugJob : IJobEntity
@@ -42,7 +40,7 @@ public partial struct SpawnBugJob : IJobEntity
         if (!level.TimeToSpawnBug) 
             return;
 
-        if (level.BugSpawnPoints.Length == 0) 
+        if (!level.BugSpawnPointInited()) 
             return;
 
         level.BugSpawnTimer = level.BugSpawnRate;
@@ -51,5 +49,7 @@ public partial struct SpawnBugJob : IJobEntity
         var tfBug = level.GetBugSpawnPoint();
         ecb.SetComponent(bug, tfBug);
 
+        var bugFacing = MathHelper.LookAt(tfBug.Position, level.Position);
+        ecb.SetComponent(bug, new EntityFacing { Value = bugFacing });
     }
 }

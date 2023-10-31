@@ -13,7 +13,6 @@ public partial struct BugRiseSystem : ISystem
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-
     }
 
     [BurstCompile]
@@ -35,6 +34,7 @@ public partial struct BugRiseJob : IJobEntity
     public float DeltaTime;
     public EntityCommandBuffer.ParallelWriter Ecb;
 
+    [BurstCompile]
     private void Execute(BugRiseAspect bug, [EntityIndexInQuery] int sortKey)
     {
         bug.Rise(DeltaTime);
@@ -42,6 +42,6 @@ public partial struct BugRiseJob : IJobEntity
 
         bug.SetAtGround();
         Ecb.RemoveComponent<BugRiseRate>(sortKey, bug.Entity);
+        Ecb.SetComponentEnabled<BugWalkProperties>(sortKey, bug.Entity, true);
     }
-
 }
