@@ -20,9 +20,9 @@ public partial struct InitializeBugSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
-        foreach (var bug in SystemAPI.Query<BugWalkAspect>().WithAll<NewEntityTag>())
+        foreach (var bug in SystemAPI.Query<BugWalkAspect>().WithAll<EntityTag<BugWalkProperties>>())
         {
-            ecb.RemoveComponent<NewEntityTag>(bug.Entity);
+            ecb.RemoveComponent<EntityTag<BugWalkProperties>>(bug.Entity);
             ecb.SetComponentEnabled<BugWalkProperties>(bug.Entity, false);
         }
         ecb.Playback(state.EntityManager);

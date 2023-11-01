@@ -30,4 +30,10 @@ public readonly partial struct BugWalkAspect : IAspect
         var swayAngle = WalkAmp * math.sin(WalkFreq * WalkTimer * WalkSpeed);
         _transform.ValueRW.Rotation = quaternion.Euler(swayAngle, Facing, 0.0f);
     }
+
+    public bool IsInRange(float3 target, float range)
+    {
+        return math.distancesq(target, _transform.ValueRO.Position) <= range;
+    }
+
 }

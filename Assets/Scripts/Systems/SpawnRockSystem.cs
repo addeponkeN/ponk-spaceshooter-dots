@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using static UnityEngine.GraphicsBuffer;
 
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup))]
@@ -29,17 +30,24 @@ public partial struct SpawnRockSystem : ISystem
         var ecb = new EntityCommandBuffer(Allocator.Temp);
         var spawnPointsBuilder = new BlobBuilder(Allocator.Temp);
         ref var spawnPoints = ref spawnPointsBuilder.ConstructRoot<BugSpawnPointsBlob>();
-        var arrayBuilder = spawnPointsBuilder.Allocate(ref spawnPoints.Value, level.RocksToSpawn);
 
-        var rockOffset = new float3(0.0f, -2.0f, 1.0f);
         int rockCount = level.RocksToSpawn;
 
-        for ( int i = 0; i < rockCount; i++ )
-        {
-            var rock = ecb.Instantiate(level.RockPrefab);
-            var rockTransform = level.GetRandomTombstoneTransform();
-            ecb.SetComponent(rock, rockTransform);
+        var arrayBuilder = spawnPointsBuilder.Allocate(ref spawnPoints.Value, rockCount);
 
+        var rockOffset = new float3(0.0f, -2.0f, 1.0f);
+        var levelPosition = level.Position;
+        LocalTransform rockTransform;
+
+        for (int i = 0; i < rockCount; i++)
+        {
+            do
+            {
+                rockTransform = level.GetRandomTombstoneTransform();
+            } while (math.distancesq(rockTransform.Position, levelPosition) < 30.0f);
+
+            var rock = ecb.Instantiate(level.RockPrefab);
+            ecb.SetComponent(rock, rockTransform);
             var bugSpawnPoint = rockTransform.Position + rockOffset;
             arrayBuilder[i] = bugSpawnPoint;
         }

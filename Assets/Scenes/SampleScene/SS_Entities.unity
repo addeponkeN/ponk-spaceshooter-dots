@@ -168,15 +168,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size:
-    x: 100
-    y: 100
-  RockCount: 100
+    x: 200
+    y: 200
+  RockCount: 300
   RockPrefab: {fileID: 4378060113189059340, guid: f3fa8f69409b71648b796de4ee1c05cf,
     type: 3}
-  RndSeed: 100
+  RndSeed: 420
   BugPrefab: {fileID: 5002082258710911177, guid: 8bcbddb4e003f5d449f31301963dac10,
     type: 3}
-  BugSpawnRate: 1
+  BugSpawnRate: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

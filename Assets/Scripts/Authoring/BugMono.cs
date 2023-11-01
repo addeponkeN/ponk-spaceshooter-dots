@@ -24,6 +24,6 @@ public class BugBaker : Baker<BugMono>
         });
         AddComponent<EntityTimer>(entity);
         AddComponent<EntityFacing>(entity);
-        AddComponent<NewEntityTag>(entity);
+        AddComponent<EntityTag<BugWalkProperties>>(entity);
     }
 }
