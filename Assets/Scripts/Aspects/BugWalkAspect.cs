@@ -11,9 +11,9 @@ public readonly partial struct BugWalkAspect : IAspect
     public readonly RefRO<BugWalkProperties> _walkProperties;
     public readonly RefRO<EntityFacing> _facing;
 
-    private float WalkSpeed => _walkProperties.ValueRO.WalkSpeed;
-    private float WalkAmp => _walkProperties.ValueRO.WalkAmp;
-    private float WalkFreq => _walkProperties.ValueRO.WalkFreq;
+    private float WalkSpeed => _walkProperties.ValueRO.Speed;
+    private float WalkAmp => _walkProperties.ValueRO.SwayAmp;
+    private float WalkFreq => _walkProperties.ValueRO.SwayFreq;
     private float Facing => _facing.ValueRO.Value;
 
     private float WalkTimer
@@ -25,9 +25,9 @@ public readonly partial struct BugWalkAspect : IAspect
     public void Walk(float dt)
     {
         WalkTimer += dt;
+        var walkWave = math.sin(WalkFreq * WalkTimer * WalkSpeed);
         _transform.ValueRW.Position += _transform.ValueRO.Forward() * WalkSpeed * dt;
-
-        var swayAngle = WalkAmp * math.sin(WalkFreq * WalkTimer * WalkSpeed);
+        var swayAngle = WalkAmp * walkWave;
         _transform.ValueRW.Rotation = quaternion.Euler(swayAngle, Facing, 0.0f);
     }
 
